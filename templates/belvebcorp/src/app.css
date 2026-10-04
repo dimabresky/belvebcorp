@@ -1,0 +1,307 @@
+@import "tailwindcss";
+
+@source inline("text-display text-heading text-title text-nav text-label text-body text-meta text-caption text-button text-button-lg");
+
+@font-face {
+  font-family: "Cera Pro";
+  src: url("fonts/CeraPro/CeraPro-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cera Pro";
+  src: url("fonts/CeraPro/CeraPro-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme static {
+  --font-sans: "Cera Pro", sans-serif;
+
+  --color-heading: #0d0c54;
+  --color-foreground: #333740;
+  --color-muted: #9799b1;
+  --color-muted-strong: #767a89;
+  --color-muted-soft: #c3c2d3;
+  --color-caption: #89898f;
+  --color-primary: #6177f3;
+  --color-accent: #5b78fb;
+  --color-surface: #ffffff;
+  --color-canvas: #f7f8fc;
+  --color-tint: #e9ecff;
+  --color-border: #e7e7f0;
+  --color-border-soft: #ebe7ff;
+  --color-header: #101131;
+  --color-header-bar: #1a1b49;
+  --color-search: #efefef;
+  --color-placeholder: #c0c0c0;
+  --color-success: #74d184;
+  --color-success-border: #a2eac3;
+
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --layout-page: 1920px;
+  --layout-content: 1140px;
+  --layout-sidebar: 300px;
+  --layout-inset: 201px;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-foreground);
+    background-color: var(--color-canvas);
+  }
+}
+
+@utility text-display {
+  font-size: 25px;
+  line-height: 48px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: var(--color-heading);
+}
+
+@utility text-heading {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: var(--color-heading);
+}
+
+@utility text-title {
+  font-size: 20px;
+  line-height: 23px;
+  font-weight: 500;
+  letter-spacing: -0.18px;
+  color: var(--color-heading);
+}
+
+@utility text-nav {
+  font-size: 18px;
+  line-height: 22.4px;
+  font-weight: 500;
+}
+
+@utility text-label {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: -0.8px;
+}
+
+@utility text-body {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+@utility text-meta {
+  font-size: 18px;
+  line-height: 22.4px;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+@utility text-caption {
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 400;
+  color: var(--color-caption);
+}
+
+@utility text-button {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: -0.18px;
+}
+
+@utility text-button-lg {
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    background-color: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    @apply text-button-lg;
+    height: 45px;
+    padding-inline: 20px;
+    border-radius: var(--radius-md);
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+  }
+
+  .btn-primary-sm {
+    @apply text-button;
+    height: 30px;
+    padding-inline: 16px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  .btn-ghost {
+    @apply text-label;
+    height: 40px;
+    padding-inline: 16px;
+    border-radius: var(--radius-md);
+    border-color: var(--color-accent);
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  .chip {
+    @apply text-label;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    padding-inline: 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--color-heading);
+    white-space: nowrap;
+  }
+
+  .chip-active {
+    height: 30px;
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+  }
+
+  .input-search {
+    height: 45px;
+    width: 100%;
+    padding-inline: 15px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-search);
+    color: var(--color-foreground);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .input-search::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-lg);
+  }
+
+  .card-compact {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+  }
+
+  .avatar-sm,
+  .avatar-md,
+  .avatar-lg {
+    display: inline-block;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .avatar-sm {
+    width: 25px;
+    height: 25px;
+  }
+
+  .avatar-md {
+    width: 40px;
+    height: 40px;
+  }
+
+  .avatar-lg {
+    width: 110px;
+    height: 110px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 14px;
+    height: 14px;
+    padding-inline: 2px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: 400;
+  }
+
+  .badge-online {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--color-success-border);
+    border-radius: var(--radius-full);
+    background-color: var(--color-success);
+  }
+
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-surface);
+    color: var(--color-heading);
+    cursor: pointer;
+  }
+
+  .icon-tile,
+  .icon-tile-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: var(--radius-xs);
+    background-color: var(--color-border-soft);
+  }
+
+  .icon-tile {
+    width: 45px;
+    height: 45px;
+  }
+
+  .icon-tile-sm {
+    width: 35px;
+    height: 35px;
+  }
+}
