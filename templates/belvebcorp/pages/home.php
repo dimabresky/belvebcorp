@@ -253,7 +253,7 @@ $outlineButton = 'btn h-10 rounded-md border border-accent/60 text-[20px] font-m
     </section>
 
     <div class="flex items-start gap-[17px]">
-        <section class="card w-[813px] px-8 pt-[14px] pb-[27px]" aria-labelledby="employees-title">
+        <section class="card min-w-0 flex-1 px-8 pt-[14px] pb-[27px]" aria-labelledby="employees-title">
             <div class="flex items-center gap-5">
                 <span class="section-icon"><img src="<?= $img('icon-user.svg') ?>" width="22" height="22" alt=""></span>
                 <h2 id="employees-title" class="section-title">Сотрудники</h2>

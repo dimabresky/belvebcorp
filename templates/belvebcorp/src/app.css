@@ -382,20 +382,25 @@
   }
 
   .page-shell {
+    --shell-pad-left: calc(201 / 1920 * 100cqw / 2);
+    --shell-pad-right: calc(198 / 1920 * 100cqw / 2);
+    --main-visual: calc(var(--layout-content) * 100cqw / var(--layout-page));
+    --content-box: calc(100cqw - var(--shell-pad-left) - var(--shell-pad-right));
+    --column-gap: calc((var(--content-box) - var(--layout-sidebar) - var(--main-visual)) / 2);
     display: grid;
-    grid-template-columns: minmax(0, 1140fr) minmax(var(--layout-sidebar), 300fr);
-    column-gap: calc(81 / 1920 * 100cqw);
+    grid-template-columns: minmax(0, 1fr) var(--layout-sidebar);
+    column-gap: var(--column-gap);
     width: 100%;
     padding-top: calc(25 / 1920 * 100cqw);
-    padding-left: calc(201 / 1920 * 100cqw / 2);
-    padding-right: calc(198 / 1920 * 100cqw / 2);
+    padding-left: var(--shell-pad-left);
+    padding-right: var(--shell-pad-right);
     align-items: start;
   }
 
   .page-main {
     grid-column: 1;
     grid-row: 1;
-    width: var(--layout-content);
+    width: calc((var(--main-visual) + var(--column-gap)) * var(--layout-page) / 100cqw);
     min-width: 0;
   }
 
