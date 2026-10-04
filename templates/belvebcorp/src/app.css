@@ -65,7 +65,8 @@
   --radius-full: 9999px;
 
   --layout-page: 1920px;
-  --layout-min: 1020px;
+  --layout-max: 1515px;
+  --layout-min: 1340px;
   --layout-content: 1140px;
   --layout-sidebar: 300px;
   --layout-inset: 201px;
@@ -354,7 +355,7 @@
 
   .site-frame {
     width: 100%;
-    max-width: var(--layout-page);
+    max-width: var(--layout-max);
     min-width: var(--layout-min);
     margin-inline: auto;
     container-type: inline-size;
