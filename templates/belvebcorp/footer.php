@@ -40,5 +40,7 @@ $img = static function (string $file): string {
         <a href="#">Политика обработки персональных данных</a>
     </div>
 </footer>
+</div>
+</div>
 </body>
 </html>

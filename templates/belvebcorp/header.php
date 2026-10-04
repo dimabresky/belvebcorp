@@ -67,6 +67,8 @@ $dishes = [
 </head>
 <body>
 <?php $APPLICATION->ShowPanel(); ?>
+<div class="site-frame">
+<div class="site-canvas">
 <header class="site-header">
     <a class="logo-frame h-[55px] w-[81px]" href="/">
         <img src="<?= $img('logo.png') ?>" alt="БелВЭБ">
@@ -123,6 +125,7 @@ $dishes = [
 </header>
 <div class="page-shell">
     <aside class="page-sidebar" aria-label="Виджеты">
+        <div class="page-sidebar-scale">
         <section class="card flex flex-col gap-8 pt-5 pr-[27px] pb-[18px] pl-[21px]">
             <div class="flex flex-col gap-[13px]">
                 <h2 class="text-heading">Популярные ресурсы</h2>
@@ -218,5 +221,6 @@ $dishes = [
                 </ul>
             </div>
         </section>
+        </div>
     </aside>
     <main class="page-main">
