@@ -367,8 +367,7 @@
 
   .site-header,
   .site-footer,
-  .page-main,
-  .page-sidebar-scale {
+  .page-main {
     zoom: calc(100cqw / var(--layout-page));
   }
 
@@ -384,12 +383,12 @@
 
   .page-shell {
     display: grid;
-    grid-template-columns: 1140fr 300fr;
+    grid-template-columns: minmax(0, 1140fr) minmax(var(--layout-sidebar), 300fr);
     column-gap: calc(81 / 1920 * 100cqw);
     width: 100%;
     padding-top: calc(25 / 1920 * 100cqw);
-    padding-left: calc(201 / 1920 * 100cqw);
-    padding-right: calc(198 / 1920 * 100cqw);
+    padding-left: calc(201 / 1920 * 100cqw / 2);
+    padding-right: calc(198 / 1920 * 100cqw / 2);
     align-items: start;
   }
 
@@ -408,7 +407,7 @@
     top: calc(25 / 1920 * 100cqw);
     align-self: start;
     width: 100%;
-    min-width: 0;
+    min-width: var(--layout-sidebar);
     max-height: calc(100vh - (50 / 1920 * 100cqw));
     overflow-y: auto;
     overscroll-behavior: contain;
