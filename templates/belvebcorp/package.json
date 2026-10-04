@@ -1,0 +1,11 @@
+{
+  "name": "belvebcorp-template",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/app.css -o ./styles.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4",
+    "tailwindcss": "^4"
+  }
+}
