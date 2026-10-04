@@ -120,6 +120,12 @@ local/modules/<vendor>.<name>/
 
 Имя модуля: `<vendor>.<name>` в нижнем регистре. Namespace в `lib/` — PascalCase от этого имени.
 
+## Вёрстка и Vue
+
+- Вёрстку собирай через **Tailwind CSS CLI** (`tailwindcss` / `@tailwindcss/cli`). Стили шаблона и компонентов задавай утилитами Tailwind. Отдельный ручной CSS пиши только там, где утилиты не закрывают задачу.
+- Интерфейс компонентов Bitrix разрабатывай на **Vue, встроенном в Bitrix Framework** (BitrixVue). Подключение, компоненты, локализации, события и хранилище бери из ядра, а не из отдельной сборки Vue.
+- Как это устроено: [Vue.js и Bitrix Framework](https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=176&INDEX=Y).
+
 ## Git и доставка
 
 Основная ветка — **`main`**. Интеграционная ветка — **`dev`**.
