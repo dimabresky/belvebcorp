@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="teenyicons:computer-outline" clip-path="url(#clip0_0_21)">
+<path id="Vector" d="M19 29H27C27.5304 29 28.0391 28.7893 28.4142 28.4142C28.7893 28.0391 29 27.5304 29 27V3C29 2.46957 28.7893 1.96086 28.4142 1.58579C28.0391 1.21071 27.5304 1 27 1H19C18.4696 1 17.9609 1.21071 17.5858 1.58579C17.2107 1.96086 17 2.46957 17 3V27C17 27.5304 17.2107 28.0391 17.5858 28.4142C17.9609 28.7893 18.4696 29 19 29ZM19 29H8M13 23V29M17 11H29M20 23H26M3 7H17V23H3C2.46957 23 1.96086 22.7893 1.58579 22.4142C1.21071 22.0391 1 21.5304 1 21V9C1 8.46957 1.21071 7.96086 1.58579 7.58579C1.96086 7.21071 2.46957 7 3 7Z" stroke="#5B78FB" stroke-width="1.5"/>
+</g>
+<defs>
+<clipPath id="clip0_0_21">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>
