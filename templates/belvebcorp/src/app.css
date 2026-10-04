@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+@source "../**/*.php";
 @source inline("text-display text-heading text-title text-nav text-label text-body text-meta text-caption text-button text-button-lg");
 
 @font-face {
@@ -14,6 +15,22 @@
   font-family: "Cera Pro";
   src: url("fonts/CeraPro/CeraPro-Medium.woff") format("woff");
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Manrope;
+  src: url("fonts/Manrope/Manrope-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Manrope;
+  src: url("fonts/Manrope/Manrope-SemiBold.woff") format("woff");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -57,6 +74,11 @@
   html {
     font-family: var(--font-sans);
     color: var(--color-foreground);
+    background-color: var(--color-canvas);
+  }
+
+  body {
+    min-width: var(--layout-page);
     background-color: var(--color-canvas);
   }
 }
@@ -303,5 +325,110 @@
   .icon-tile-sm {
     width: 35px;
     height: 35px;
+  }
+
+  .font-support {
+    font-family: Manrope, sans-serif;
+  }
+
+  .logo-frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .logo-frame img {
+    position: absolute;
+    max-width: none;
+    width: 140.86%;
+    height: 207.5%;
+    left: -24.73%;
+    top: -53.75%;
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: var(--layout-page);
+    height: 97px;
+    margin-inline: auto;
+    padding-inline: var(--layout-inset);
+    background-color: var(--color-header);
+  }
+
+  .page-shell {
+    display: grid;
+    grid-template-columns: var(--layout-content) var(--layout-sidebar);
+    column-gap: 81px;
+    width: var(--layout-page);
+    margin-inline: auto;
+    padding-top: 25px;
+    padding-left: var(--layout-inset);
+    padding-right: 198px;
+    align-items: start;
+  }
+
+  .page-main {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    min-height: calc(100vh + 480px);
+  }
+
+  .page-sidebar {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 25px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: var(--layout-sidebar);
+    max-height: calc(100vh - 50px);
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .page-sidebar > * {
+    flex-shrink: 0;
+  }
+
+  .page-sidebar > :nth-child(3) {
+    margin-top: 10px;
+  }
+
+  .site-footer {
+    width: var(--layout-page);
+    margin-inline: auto;
+    margin-top: 58px;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-header);
+    color: var(--color-surface);
+  }
+
+  .site-footer-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 218px;
+    padding: 25px var(--layout-inset) 32px;
+  }
+
+  .site-footer-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 76px;
+    padding-left: var(--layout-inset);
+    background-color: var(--color-header-bar);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 12px;
+    letter-spacing: -0.18px;
   }
 }
