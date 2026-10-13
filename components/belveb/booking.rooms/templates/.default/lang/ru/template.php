@@ -1,0 +1,16 @@
+<?php
+
+$MESS['BELVEB_BOOKING_ROOMS_TITLE'] = 'Бронирование';
+$MESS['BELVEB_BOOKING_ROOMS_BREADCRUMB'] = 'Хлебные крошки';
+$MESS['BELVEB_BOOKING_ROOMS_HOME'] = 'Главная';
+$MESS['BELVEB_BOOKING_ROOMS_TAB_ROOMS'] = 'Переговорные';
+$MESS['BELVEB_BOOKING_ROOMS_TAB_MINE'] = 'Мои бронирования';
+$MESS['BELVEB_BOOKING_ROOMS_FILTER_DATE'] = 'Дата';
+$MESS['BELVEB_BOOKING_ROOMS_FILTER_TIME'] = 'Время встречи';
+$MESS['BELVEB_BOOKING_ROOMS_FILTER_PARTICIPANTS'] = 'Участники';
+$MESS['BELVEB_BOOKING_ROOMS_SEARCH'] = 'Найти переговорные';
+$MESS['BELVEB_BOOKING_ROOMS_FLOOR'] = 'Этаж';
+$MESS['BELVEB_BOOKING_ROOMS_TYPE'] = 'Тип переговорной';
+$MESS['BELVEB_BOOKING_ROOMS_RESET'] = 'Сбросить параметры';
+$MESS['BELVEB_BOOKING_ROOMS_AVAILABLE'] = 'Доступные переговорные';
+$MESS['BELVEB_BOOKING_ROOMS_BOOK'] = 'Забронировать';
