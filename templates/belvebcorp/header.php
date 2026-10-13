@@ -29,6 +29,7 @@ $actions = [
         'height' => '29',
         'label' => 'Забронировать переговорную',
         'labelClass' => 'text-[15px] font-medium leading-7 tracking-[-0.8px] text-[var(--color-heading)]',
+        'href' => '/booking/',
     ],
     [
         'icon' => 'icon-help.svg',
@@ -152,7 +153,7 @@ $dishes = [
             <ul class="mt-[13px] flex flex-col gap-5">
                 <?php foreach ($actions as $action) { ?>
                     <li>
-                        <a class="flex items-center gap-[15px]" href="#">
+                        <a class="flex items-center gap-[15px]" href="<?= htmlspecialcharsbx($action['href'] ?? '#') ?>">
                             <span class="icon-tile">
                                 <img
                                     src="<?= $img($action['icon']) ?>"
