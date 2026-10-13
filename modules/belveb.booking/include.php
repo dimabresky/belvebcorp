@@ -2,4 +2,36 @@
 
 use Bitrix\Main\Loader;
 
-Loader::registerAutoLoadClasses('belveb.booking', []);
+Loader::registerAutoLoadClasses('belveb.booking', [
+    'Belveb\\Booking\\Domain\\MinuteOfDay' => 'lib/Domain/MinuteOfDay.php',
+    'Belveb\\Booking\\Domain\\CalendarDate' => 'lib/Domain/CalendarDate.php',
+    'Belveb\\Booking\\Domain\\TimeRange' => 'lib/Domain/TimeRange.php',
+    'Belveb\\Booking\\Domain\\Grid' => 'lib/Domain/Grid.php',
+    'Belveb\\Booking\\Domain\\Clock' => 'lib/Domain/Clock.php',
+    'Belveb\\Booking\\Domain\\FixedClock' => 'lib/Domain/FixedClock.php',
+    'Belveb\\Booking\\Domain\\SystemClock' => 'lib/Domain/SystemClock.php',
+    'Belveb\\Booking\\Domain\\WorkCalendar' => 'lib/Domain/WorkCalendar.php',
+    'Belveb\\Booking\\Domain\\EveryDayCalendar' => 'lib/Domain/EveryDayCalendar.php',
+    'Belveb\\Booking\\Domain\\Person' => 'lib/Domain/Person.php',
+    'Belveb\\Booking\\Domain\\Nobody' => 'lib/Domain/Nobody.php',
+    'Belveb\\Booking\\Domain\\Amenity' => 'lib/Domain/Amenity.php',
+    'Belveb\\Booking\\Domain\\Room' => 'lib/Domain/Room.php',
+    'Belveb\\Booking\\Domain\\ParticipantList' => 'lib/Domain/ParticipantList.php',
+    'Belveb\\Booking\\Domain\\SeriesRule' => 'lib/Domain/SeriesRule.php',
+    'Belveb\\Booking\\Domain\\Occurrence' => 'lib/Domain/Occurrence.php',
+    'Belveb\\Booking\\Domain\\Booking' => 'lib/Domain/Booking.php',
+    'Belveb\\Booking\\Domain\\NoBooking' => 'lib/Domain/NoBooking.php',
+    'Belveb\\Booking\\Domain\\RejectedDraft' => 'lib/Domain/RejectedDraft.php',
+    'Belveb\\Booking\\Domain\\ClearRange' => 'lib/Domain/ClearRange.php',
+    'Belveb\\Booking\\Domain\\NearestFree' => 'lib/Domain/NearestFree.php',
+    'Belveb\\Booking\\Domain\\NoFreeSlot' => 'lib/Domain/NoFreeSlot.php',
+    'Belveb\\Booking\\Domain\\Slot' => 'lib/Domain/Slot.php',
+    'Belveb\\Booking\\Domain\\Timeline' => 'lib/Domain/Timeline.php',
+    'Belveb\\Booking\\Domain\\RoomFilter' => 'lib/Domain/RoomFilter.php',
+    'Belveb\\Booking\\Domain\\AcceptedDraft' => 'lib/Domain/AcceptedDraft.php',
+    'Belveb\\Booking\\Domain\\BookingDraft' => 'lib/Domain/BookingDraft.php',
+    'Belveb\\Booking\\Fixture\\FixtureCatalog' => 'lib/Fixture/FixtureCatalog.php',
+    'Belveb\\Booking\\View\\PageState' => 'lib/View/PageState.php',
+    'Belveb\\Booking\\View\\ScreenData' => 'lib/View/ScreenData.php',
+    'Belveb\\Booking\\View\\AppFrame' => 'lib/View/AppFrame.php',
+]);

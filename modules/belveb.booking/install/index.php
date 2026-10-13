@@ -59,18 +59,41 @@ class belveb_booking extends CModule
             true
         );
         CopyDirFiles(
+            __DIR__ . '/js',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/js',
+            true,
+            true
+        );
+        CopyDirFiles(
             __DIR__ . '/public',
             $_SERVER['DOCUMENT_ROOT'],
             true,
             true
         );
 
+        if (class_exists(\Bitrix\Main\UrlRewriter::class)) {
+            \Bitrix\Main\UrlRewriter::delete(SITE_ID, ['ID' => 'belveb:booking']);
+            \Bitrix\Main\UrlRewriter::add(SITE_ID, [
+                'CONDITION' => '#^/booking/#',
+                'RULE' => '',
+                'ID' => 'belveb:booking',
+                'PATH' => '/booking/index.php',
+            ]);
+        }
+
         return true;
     }
 
     public function unInstallFiles(): bool
     {
+        DeleteDirFilesEx('/local/components/belveb/booking');
         DeleteDirFilesEx('/local/components/belveb/booking.rooms');
+        DeleteDirFilesEx('/local/components/belveb/booking.my');
+        DeleteDirFilesEx('/local/components/belveb/booking.room');
+        DeleteDirFilesEx('/local/js/belveb');
+        if (class_exists(\Bitrix\Main\UrlRewriter::class)) {
+            \Bitrix\Main\UrlRewriter::delete(SITE_ID, ['ID' => 'belveb:booking']);
+        }
         DeleteDirFiles(__DIR__ . '/public', $_SERVER['DOCUMENT_ROOT']);
 
         return true;

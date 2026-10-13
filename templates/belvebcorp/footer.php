@@ -9,6 +9,26 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 $img = static function (string $file): string {
     return htmlspecialcharsbx(SITE_TEMPLATE_PATH . '/images/' . $file);
 };
+$hidePageHead = $APPLICATION->GetPageProperty('hide_page_head') === 'Y'
+    || $APPLICATION->GetCurPage(false) === '/';
+if (!$hidePageHead) {
+    ob_start();
+    echo '<h1 class="text-[40px] font-bold leading-[43px] text-foreground">'
+        . htmlspecialcharsbx($APPLICATION->GetTitle(false))
+        . '</h1>';
+    $APPLICATION->IncludeComponent(
+        'bitrix:breadcrumb',
+        '',
+        [
+            'START_FROM' => '0',
+            'PATH' => '',
+            'SITE_ID' => SITE_ID,
+        ],
+        false,
+        ['HIDE_ICONS' => 'Y']
+    );
+    $APPLICATION->AddViewContent('belveb_page_head', (string) ob_get_clean());
+}
 ?>
     </main>
 </div>

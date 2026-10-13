@@ -225,3 +225,10 @@ $dishes = [
         </div>
     </aside>
     <main class="page-main">
+        <?php
+        $hidePageHead = $APPLICATION->GetPageProperty('hide_page_head') === 'Y'
+            || $APPLICATION->GetCurPage(false) === '/';
+        if (!$hidePageHead) {
+            $APPLICATION->ShowViewContent('belveb_page_head');
+        }
+        ?>

@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /booking/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* index.php [L]
