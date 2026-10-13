@@ -31,3 +31,5 @@ require_once $directory . '/Domain/AcceptedDraft.php';
 require_once $directory . '/Domain/BookingDraft.php';
 require_once $directory . '/Fixture/FixtureCatalog.php';
 require_once $directory . '/View/PageState.php';
+require_once $directory . '/View/ScreenData.php';
+require_once $directory . '/View/AppFrame.php';

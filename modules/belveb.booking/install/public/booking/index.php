@@ -6,9 +6,11 @@ require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/header.php';
 $APPLICATION->SetTitle('Бронирование');
 
 $APPLICATION->IncludeComponent(
-    'belveb:booking.rooms',
+    'belveb:booking',
     '',
-    [],
+    [
+        'SEF_FOLDER' => '/booking/',
+    ],
     false
 );
 

@@ -32,4 +32,6 @@ Loader::registerAutoLoadClasses('belveb.booking', [
     'Belveb\\Booking\\Domain\\BookingDraft' => 'lib/Domain/BookingDraft.php',
     'Belveb\\Booking\\Fixture\\FixtureCatalog' => 'lib/Fixture/FixtureCatalog.php',
     'Belveb\\Booking\\View\\PageState' => 'lib/View/PageState.php',
+    'Belveb\\Booking\\View\\ScreenData' => 'lib/View/ScreenData.php',
+    'Belveb\\Booking\\View\\AppFrame' => 'lib/View/AppFrame.php',
 ]);
