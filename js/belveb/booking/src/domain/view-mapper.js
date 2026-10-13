@@ -34,7 +34,7 @@ BX.namespace('Belveb.Booking.Domain');
                 return found || null;
             },
             timelineFor: function (room, date, ignoreId) {
-                var rows = bookings.filter(function (booking) {
+                var rows = this.bookings.filter(function (booking) {
                     return booking.room().code() === room.code();
                 });
                 return new Domain.Timeline(room.grid(), rows, user, date, clock, ignoreId || 0);

@@ -122,13 +122,33 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
             this.modal = draft;
         },
         submit: function () {
+            var Domain = BX.Belveb.Booking.Domain;
             var result = this.modal.confirm();
             if (!result.accepted()) {
                 this.toast = {kind: 'error', text: result.view().message};
                 return;
             }
+            var booking = result.booking();
+            this.model.bookings.push(new Domain.Booking(
+                this.nextId(),
+                booking.room(),
+                booking.organizer(),
+                booking.date(),
+                booking.range(),
+                booking.title(),
+                booking.description(),
+                booking.participants(),
+                booking.status(),
+                booking.series(),
+                booking.sourceId()
+            ));
             this.toast = {kind: 'success', text: 'Встреча забронирована'};
             this.modal = null;
+        },
+        nextId: function () {
+            return this.model.bookings.reduce(function (max, item) {
+                return Math.max(max, item.id());
+            }, 0) + 1;
         },
         cancel: function (id) {
             var booking = this.model.bookings.find(function (item) {
@@ -164,6 +184,37 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
         onSpan: function (from, to) {
             this.onSelect(from, to);
             this.modal = this.modal.withRange(this.range);
+        },
+        onDate: function (text) {
+            var Domain = BX.Belveb.Booking.Domain;
+            var date;
+            try {
+                date = new Domain.CalendarDate(text);
+            } catch (error) {
+                return;
+            }
+            this.day = date;
+            this.modal = this.modal.withDate(date, this.model.timelineFor(this.room, date, 0));
+        },
+        onFrom: function (text) {
+            this.onEdge(text, true);
+        },
+        onTo: function (text) {
+            this.onEdge(text, false);
+        },
+        onEdge: function (text, isStart) {
+            var Domain = BX.Belveb.Booking.Domain;
+            var next;
+            try {
+                var minute = new Domain.MinuteOfDay(text);
+                next = isStart
+                    ? new Domain.TimeRange(minute, this.range.end())
+                    : new Domain.TimeRange(this.range.start(), minute);
+            } catch (error) {
+                return;
+            }
+            this.range = next;
+            this.modal = this.modal.withRange(next);
         },
     },
     template: `
@@ -201,6 +252,9 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
                 @add="onAdd"
                 @remove="onRemove"
                 @span="onSpan"
+                @date="onDate"
+                @from="onFrom"
+                @to="onTo"
                 @submit="submit"
             ></belveb-booking-modal>
             <belveb-booking-toast v-if="toast" :kind="toast.kind" :text="toast.text"></belveb-booking-toast>

@@ -79,6 +79,10 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
         },
         details: function (id) {
             var booking = this.find(id);
+            if (!booking || !booking.canCancel(this.model.user)) {
+                this.toast = {kind: 'error', text: 'Изменить эту встречу нельзя'};
+                return;
+            }
             var timeline = this.model.timelineFor(booking.room(), booking.date(), booking.id());
             this.modal = {
                 mode: 'edit',
@@ -150,6 +154,38 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
             }
             this.patch(this.modal.draft.withRange(new Domain.TimeRange(new Domain.MinuteOfDay(start), new Domain.MinuteOfDay(end))));
         },
+        onDate: function (text) {
+            var Domain = BX.Belveb.Booking.Domain;
+            var date;
+            try {
+                date = new Domain.CalendarDate(text);
+            } catch (error) {
+                return;
+            }
+            var originId = this.modal.draft.view().originId;
+            var timeline = this.model.timelineFor(this.modal.draft.room(), date, originId);
+            this.patch(this.modal.draft.withDate(date, timeline));
+        },
+        onFrom: function (text) {
+            this.onEdge(text, true);
+        },
+        onTo: function (text) {
+            this.onEdge(text, false);
+        },
+        onEdge: function (text, isStart) {
+            var Domain = BX.Belveb.Booking.Domain;
+            var range = this.modal.draft.range();
+            var next;
+            try {
+                var minute = new Domain.MinuteOfDay(text);
+                next = isStart
+                    ? new Domain.TimeRange(minute, range.end())
+                    : new Domain.TimeRange(range.start(), minute);
+            } catch (error) {
+                return;
+            }
+            this.patch(this.modal.draft.withRange(next));
+        },
         onRepeat: function (rule) {
             var Domain = BX.Belveb.Booking.Domain;
             this.patch(this.modal.draft.withSeries(new Domain.SeriesRule(rule, this.modal.draft.draftDate, 90)));
@@ -177,8 +213,39 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
                 this.toast = {kind: 'error', text: result.view().message};
                 return;
             }
+            this.remember(result.booking());
             this.toast = {kind: 'success', text: result.view().message};
             this.modal = null;
+        },
+        remember: function (booking) {
+            var Domain = BX.Belveb.Booking.Domain;
+            var editing = this.modal.mode === 'edit';
+            var stored = editing ? booking : new Domain.Booking(
+                this.nextId(),
+                booking.room(),
+                booking.organizer(),
+                booking.date(),
+                booking.range(),
+                booking.title(),
+                booking.description(),
+                booking.participants(),
+                booking.status(),
+                booking.series(),
+                booking.sourceId()
+            );
+            var index = this.model.bookings.findIndex(function (item) {
+                return item.id() === stored.id();
+            });
+            if (index >= 0) {
+                this.model.bookings.splice(index, 1, stored);
+                return;
+            }
+            this.model.bookings.push(stored);
+        },
+        nextId: function () {
+            return this.model.bookings.reduce(function (max, item) {
+                return Math.max(max, item.id());
+            }, 0) + 1;
         },
         names: function (row) {
             return row.participants.map(function (person) {
@@ -248,6 +315,9 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
                 @title="onTitle"
                 @description="onDescription"
                 @span="onSpan"
+                @date="onDate"
+                @from="onFrom"
+                @to="onTo"
                 @repeat="onRepeat"
                 @add="onAdd"
                 @remove="onRemove"
