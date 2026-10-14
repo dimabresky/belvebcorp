@@ -21,17 +21,16 @@ BX.Belveb.Booking.mount = function (payload) {
     };
     var tag = tags[payload.page] || tags.rooms;
     var bitrixVue = BX.Vue3.BitrixVue;
-    var components = {};
-    Object.keys(bitrixVue.components).forEach(function (name) {
-        components[name] = bitrixVue.getMutableComponent(name);
-    });
-    bitrixVue.createApp({
-        components: components,
+    var app = bitrixVue.createApp({
         data: function () {
             return {payload: payload};
         },
         template: '<' + tag + ' :payload="payload"></' + tag + '>',
-    }).mount('#belveb-booking-app');
+    });
+    Object.keys(bitrixVue.components).forEach(function (name) {
+        app.component(name, bitrixVue.getMutableComponent(name));
+    });
+    app.mount('#belveb-booking-app');
 };
 
 BX.Belveb.Booking.isStored = function (payload, id) {
