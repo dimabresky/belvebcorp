@@ -133,8 +133,19 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
                 this.toast = {kind: 'error', text: 'Отменить эту встречу нельзя'};
                 return;
             }
-            this.hidden[id] = true;
-            this.toast = {kind: 'success', text: 'Встреча отменена'};
+            if (!BX.Belveb.Booking.isStored(this.payload, id)) {
+                this.hidden[id] = true;
+                this.toast = {kind: 'success', text: 'Встреча отменена'};
+                return;
+            }
+            var self = this;
+            BX.Belveb.Booking.action('booking.cancel', {id: id}).then(function () {
+                self.hidden[id] = true;
+                self.toast = {kind: 'success', text: 'Встреча отменена'};
+                BX.Belveb.Booking.action('booking.my');
+            }, function (response) {
+                self.toast = {kind: 'error', text: BX.Belveb.Booking.actionError(response)};
+            });
         },
         patch: function (next) {
             this.modal = {mode: this.modal.mode, notice: this.modal.notice, draft: next};
@@ -213,9 +224,29 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-my-bookings', {
                 this.toast = {kind: 'error', text: result.view().message};
                 return;
             }
-            this.remember(result.booking());
-            this.toast = {kind: 'success', text: result.view().message};
-            this.modal = null;
+            var booking = result.booking();
+            var fields = BX.Belveb.Booking.bookingFields(booking);
+            var editing = this.modal.mode === 'edit';
+            var originId = editing ? this.modal.draft.view().originId : 0;
+            if (editing && !BX.Belveb.Booking.isStored(this.payload, originId)) {
+                this.remember(booking);
+                this.toast = {kind: 'success', text: result.view().message};
+                this.modal = null;
+                return;
+            }
+            if (editing) {
+                fields.originId = originId;
+            }
+            var action = editing ? 'booking.update' : 'booking.add';
+            var self = this;
+            BX.Belveb.Booking.action(action, fields).then(function (response) {
+                self.remember(booking);
+                self.toast = {kind: 'success', text: (response.data && response.data.message) || result.view().message};
+                self.modal = null;
+                BX.Belveb.Booking.action('booking.my');
+            }, function (response) {
+                self.toast = {kind: 'error', text: BX.Belveb.Booking.actionError(response)};
+            });
         },
         remember: function (booking) {
             var Domain = BX.Belveb.Booking.Domain;

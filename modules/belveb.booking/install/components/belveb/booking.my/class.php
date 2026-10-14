@@ -4,14 +4,19 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/local/modules/belveb.booking/lib/bootstrap.php';
-
 use Belveb\Booking\View\ScreenData;
+use Bitrix\Main\Loader;
 
 class BelvebBookingMy extends CBitrixComponent
 {
     public function executeComponent(): void
     {
+        if (!Loader::includeModule('belveb.booking')) {
+            ShowError('Модуль belveb.booking не установлен');
+
+            return;
+        }
+
         global $USER;
 
         if (!is_object($USER) || !$USER->IsAuthorized()) {
@@ -21,9 +26,11 @@ class BelvebBookingMy extends CBitrixComponent
         }
 
         $page = max(1, (int) ($_GET['page'] ?? 1));
-        $this->arResult['STATE'] = (new ScreenData(
-            '/local/components/belveb/booking.rooms/templates/.default/images'
-        ))->pages()->my($page);
+        $state = ScreenData::open()->pages()->my($page);
+        $this->arResult = $state;
+        $this->arResult['ACTIVE'] = $state['activeBookings'];
+        $this->arResult['PREVIOUS'] = $state['previousPage'];
+        $this->arResult['NAV'] = $state['nav'];
         $this->includeComponentTemplate();
     }
 }

@@ -16,17 +16,8 @@ if (!$hidePageHead) {
     echo '<h1 class="text-[40px] font-bold leading-[43px] text-foreground">'
         . htmlspecialcharsbx($APPLICATION->GetTitle(false))
         . '</h1>';
-    $APPLICATION->IncludeComponent(
-        'bitrix:breadcrumb',
-        '',
-        [
-            'START_FROM' => '0',
-            'PATH' => '',
-            'SITE_ID' => SITE_ID,
-        ],
-        false,
-        ['HIDE_ICONS' => 'Y']
-    );
+    $arResult = $APPLICATION->arAdditionalChain;
+    include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/components/bitrix/breadcrumb/.default/template.php';
     $APPLICATION->AddViewContent('belveb_page_head', (string) ob_get_clean());
 }
 ?>
