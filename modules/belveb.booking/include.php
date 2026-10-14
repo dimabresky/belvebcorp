@@ -34,4 +34,6 @@ Loader::registerAutoLoadClasses('belveb.booking', [
     'Belveb\\Booking\\View\\PageState' => 'lib/View/PageState.php',
     'Belveb\\Booking\\View\\ScreenData' => 'lib/View/ScreenData.php',
     'Belveb\\Booking\\View\\AppFrame' => 'lib/View/AppFrame.php',
+    'Belveb\\Booking\\Install\\HighloadInstaller' => 'lib/Install/HighloadInstaller.php',
+    'Belveb\\Booking\\Install\\IblockInstaller' => 'lib/Install/IblockInstaller.php',
 ]);

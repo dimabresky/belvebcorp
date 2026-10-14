@@ -1,5 +1,7 @@
 <?php
 
+use Belveb\Booking\Install\HighloadInstaller;
+use Belveb\Booking\Install\IblockInstaller;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
 
@@ -31,23 +33,83 @@ class belveb_booking extends CModule
     public function DoInstall(): void
     {
         ModuleManager::registerModule($this->MODULE_ID);
+        if (!$this->installDB()) {
+            ModuleManager::unRegisterModule($this->MODULE_ID);
+
+            return;
+        }
         $this->installFiles();
     }
 
     public function DoUninstall(): void
     {
+        global $APPLICATION, $step;
+
+        if ((int) $step < 2) {
+            $APPLICATION->IncludeAdminFile(
+                Loc::getMessage('BELVEB_BOOKING_UNINSTALL_TITLE'),
+                __DIR__ . '/unstep1.php'
+            );
+
+            return;
+        }
+
+        if (!$this->unInstallDB([
+            'savedata' => ($_REQUEST['savedata'] ?? '') === 'Y',
+        ])) {
+            return;
+        }
+
         $this->unInstallFiles();
         ModuleManager::unRegisterModule($this->MODULE_ID);
     }
 
     public function installDB(): bool
     {
+        $this->loadInstallers();
+
+        try {
+            (new HighloadInstaller())->install();
+            (new IblockInstaller())->install();
+        } catch (\Throwable $exception) {
+            global $APPLICATION;
+            if (is_object($APPLICATION)) {
+                $APPLICATION->ThrowException($exception->getMessage());
+            }
+
+            return false;
+        }
+
         return true;
     }
 
-    public function unInstallDB(): bool
+    /**
+     * @param array<string, mixed> $arParams
+     */
+    public function unInstallDB($arParams = []): bool
     {
+        $this->loadInstallers();
+        $keepData = is_array($arParams) && !empty($arParams['savedata']);
+
+        try {
+            (new IblockInstaller())->uninstall($keepData);
+            (new HighloadInstaller())->uninstall($keepData);
+        } catch (\Throwable $exception) {
+            global $APPLICATION;
+            if (is_object($APPLICATION)) {
+                $APPLICATION->ThrowException($exception->getMessage());
+            }
+
+            return false;
+        }
+
         return true;
+    }
+
+    private function loadInstallers(): void
+    {
+        require_once dirname(__DIR__) . '/lib/Install/HighloadInstaller.php';
+        require_once dirname(__DIR__) . '/lib/Install/IblockInstaller.php';
     }
 
     public function installFiles(): bool
