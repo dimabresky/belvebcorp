@@ -111,7 +111,11 @@ local/modules/<vendor>.<name>/
 - Класс установки наследует `CModule`. `installDB`, `unInstallDB`, `installFiles`, `unInstallFiles` объявляй `public`, как в родителе.
 - `DoInstall` / `DoUninstall` ставят и снимают модуль целиком: файлы, таблицы, события, опции, агенты.
 - `unInstallDB` удаляет таблицы и опции, которые создал модуль.
-- Классы лежат в `lib/`. Подключение — `use` и `Loader::registerAutoLoadClasses` (или карта в `include.php`).
+- Классы лежат в `lib/`. У модуля с точкой в имени (`belveb.booking`) ядро при `Loader::includeModule` само регистрирует PSR-4: `Belveb\Booking` → `lib/`. Карту классов в `include.php` для такого модуля не дублируй.
+- Страница модуля — компонент Bitrix. `class.php` подключает модуль через `Loader::includeModule`, собирает `arResult` сервисом модуля и вызывает `includeComponentTemplate()`. Шаблон только выводит данные. Компонент не подключает классы через `require`.
+- Действия интерфейса — `\Bitrix\Main\Engine\Controller` в `lib/Controller/`, регистрация в `.settings.php`. Клиент вызывает `BX.ajax.runAction`. Правила остаются в `lib/Domain/`; контроллер и шаблон их не копируют.
+- Интерактив — Vue из ядра (`ui.vue3`). `BitrixVue.createApp` получает компоненты явно в `components`. Отдельная сборка Vue и сервис, который сам печатает страницу, не используются.
+- Исходники компонентов и JS лежат в `install/` и копируются установщиком. Правка только установленной копии в `local/components` или `local/js` пропадёт при переустановке.
 - Таблицы — ORM D7. SQL установки и удаления лежит в `install/db/mysql/`.
 - События модуля регистрируй через `\Bitrix\Main\EventManager` или `RegisterModuleDependences`. Обработчики остаются внутри модуля.
 - Опции читай через API опций модуля. Значения по умолчанию — в `default_option.php`.

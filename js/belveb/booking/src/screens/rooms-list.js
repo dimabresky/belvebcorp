@@ -8,6 +8,7 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-rooms-list', {
             model: model,
             filter: model.filter,
             applied: false,
+            serverRooms: null,
         };
     },
     computed: {
@@ -15,6 +16,9 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-rooms-list', {
             return this.filter.view();
         },
         rooms: function () {
+            if (this.applied && this.serverRooms) {
+                return this.serverRooms;
+            }
             if (!this.applied) {
                 return this.model.rooms.map(function (room) {
                     return room.view();
@@ -44,18 +48,34 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-rooms-list', {
         },
         onFloor: function (floor) {
             this.replace(this.filter.withFloor(floor));
-            this.applied = true;
+            this.reload();
         },
         onType: function (type) {
             this.replace(this.filter.withType(type));
-            this.applied = true;
+            this.reload();
         },
         onSearch: function () {
-            this.applied = true;
+            this.reload();
         },
         onReset: function () {
             this.filter = this.model.filter;
             this.applied = false;
+            this.serverRooms = null;
+        },
+        reload: function () {
+            var self = this;
+            var filter = this.filter.view();
+            this.applied = true;
+            BX.Belveb.Booking.action('room.list', {
+                date: filter.date,
+                timeFrom: filter.timeFrom,
+                timeTo: filter.timeTo,
+                participants: filter.participants,
+                floor: filter.floor,
+                type: filter.type,
+            }).then(function (response) {
+                self.serverRooms = response.data.rooms || [];
+            });
         },
     },
     template: `

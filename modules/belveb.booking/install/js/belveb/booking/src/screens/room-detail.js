@@ -67,6 +67,10 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
     methods: {
         onDay: function (date) {
             this.day = new BX.Belveb.Booking.Domain.CalendarDate(date);
+            BX.Belveb.Booking.action('room.timeline', {
+                code: this.room.code(),
+                date: this.day.text(),
+            });
         },
         onSelect: function (from, to) {
             var Domain = BX.Belveb.Booking.Domain;
@@ -89,12 +93,28 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
             }
         },
         onNearest: function () {
+            var self = this;
             var offer = this.timeline.nearestFree(this.duration);
             if (!offer.found()) {
                 this.toast = {kind: 'error', text: 'Время занято. Выберите другой слот'};
                 return;
             }
             this.range = offer.range();
+            BX.Belveb.Booking.action('booking.nearestFree', {
+                code: this.room.code(),
+                date: this.day.text(),
+                duration: this.duration,
+            }).then(function (response) {
+                var data = response.data || {};
+                if (!data.found) {
+                    self.toast = {kind: 'error', text: 'Время занято. Выберите другой слот'};
+                    return;
+                }
+                self.range = new BX.Belveb.Booking.Domain.TimeRange(
+                    new BX.Belveb.Booking.Domain.MinuteOfDay(data.timeFrom),
+                    new BX.Belveb.Booking.Domain.MinuteOfDay(data.timeTo)
+                );
+            });
         },
         scrollToTime: function () {
             this.$refs.time.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -129,21 +149,30 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
                 return;
             }
             var booking = result.booking();
-            this.model.bookings.push(new Domain.Booking(
-                this.nextId(),
-                booking.room(),
-                booking.organizer(),
-                booking.date(),
-                booking.range(),
-                booking.title(),
-                booking.description(),
-                booking.participants(),
-                booking.status(),
-                booking.series(),
-                booking.sourceId()
-            ));
-            this.toast = {kind: 'success', text: 'Встреча забронирована'};
-            this.modal = null;
+            var self = this;
+            BX.Belveb.Booking.action('booking.add', BX.Belveb.Booking.bookingFields(booking)).then(function (response) {
+                self.model.bookings.push(new Domain.Booking(
+                    self.nextId(),
+                    booking.room(),
+                    booking.organizer(),
+                    booking.date(),
+                    booking.range(),
+                    booking.title(),
+                    booking.description(),
+                    booking.participants(),
+                    booking.status(),
+                    booking.series(),
+                    booking.sourceId()
+                ));
+                self.toast = {kind: 'success', text: (response.data && response.data.message) || 'Встреча забронирована'};
+                self.modal = null;
+                BX.Belveb.Booking.action('room.timeline', {
+                    code: self.room.code(),
+                    date: self.day.text(),
+                });
+            }, function (response) {
+                self.toast = {kind: 'error', text: BX.Belveb.Booking.actionError(response)};
+            });
         },
         nextId: function () {
             return this.model.bookings.reduce(function (max, item) {
@@ -157,8 +186,22 @@ BX.Vue3.BitrixVue.mutableComponent('belveb-booking-room-detail', {
             if (!booking || !booking.canCancel(this.model.user)) {
                 return;
             }
-            this.hidden[id] = true;
-            this.toast = {kind: 'success', text: 'Встреча отменена'};
+            if (!BX.Belveb.Booking.isStored(this.payload, id)) {
+                this.hidden[id] = true;
+                this.toast = {kind: 'success', text: 'Встреча отменена'};
+                return;
+            }
+            var self = this;
+            BX.Belveb.Booking.action('booking.cancel', {id: id}).then(function () {
+                self.hidden[id] = true;
+                self.toast = {kind: 'success', text: 'Встреча отменена'};
+                BX.Belveb.Booking.action('room.timeline', {
+                    code: self.room.code(),
+                    date: self.day.text(),
+                });
+            }, function (response) {
+                self.toast = {kind: 'error', text: BX.Belveb.Booking.actionError(response)};
+            });
         },
         onTitle: function (title) {
             this.modal = this.modal.withTitle(title);
