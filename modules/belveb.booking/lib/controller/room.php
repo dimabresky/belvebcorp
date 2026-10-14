@@ -9,6 +9,8 @@ use InvalidArgumentException;
 
 /**
  * Room list, card and day timeline for the booking screens.
+ *
+ * This file stays on a lowercase path: Bitrix resolves belveb:booking.room.list to lib/controller/room.php.
  */
 class Room extends Controller
 {

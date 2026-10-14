@@ -7,6 +7,8 @@ use Bitrix\Main\Engine\Controller;
 
 /**
  * Employee lookup for the participant field.
+ *
+ * This file stays on a lowercase path: Bitrix resolves belveb:booking.user.search to lib/controller/user.php.
  */
 class User extends Controller
 {

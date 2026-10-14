@@ -11,6 +11,8 @@ use InvalidArgumentException;
 
 /**
  * Create, change and cancel bookings. Checks run in the domain, not in the template.
+ *
+ * This file stays on a lowercase path: Bitrix resolves belveb:booking.booking.add to lib/controller/booking.php.
  */
 class Booking extends Controller
 {
