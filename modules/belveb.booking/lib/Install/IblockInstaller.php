@@ -63,6 +63,8 @@ final class IblockInstaller
         if (!$added) {
             throw new RuntimeException('Iblock type was not created. ' . $type->LAST_ERROR);
         }
+
+        $this->clearTypeCache();
     }
 
     private function installRooms(): int
@@ -139,15 +141,18 @@ final class IblockInstaller
         }
 
         $iblock = new \CIBlock();
+        $sites = $this->sites();
         $id = $iblock->Add([
             'ACTIVE' => 'Y',
             'NAME' => $name,
             'CODE' => $code,
             'API_CODE' => $apiCode,
             'IBLOCK_TYPE_ID' => self::TYPE_ID,
-            'SITE_ID' => [$this->siteId()],
+            'LID' => $sites,
+            'SITE_ID' => $sites,
             'SORT' => $sort,
-            'GROUP_ID' => [2 => 'R', 1 => 'W'],
+            'GROUP_ID' => ['2' => 'R', '1' => 'W'],
+            'RIGHTS_MODE' => 'S',
             'VERSION' => 2,
             'INDEX_ELEMENT' => 'N',
             'INDEX_SECTION' => 'N',
@@ -158,7 +163,7 @@ final class IblockInstaller
             'SECTION_PAGE_URL' => '',
         ]);
         if (!$id) {
-            throw new RuntimeException($code . ' was not created. ' . $iblock->LAST_ERROR);
+            throw new RuntimeException($code . ' was not created. ' . $this->lastError($iblock->LAST_ERROR));
         }
 
         return (int) $id;
@@ -213,13 +218,47 @@ final class IblockInstaller
         }
     }
 
-    private function siteId(): string
+    /**
+     * @return list<string>
+     */
+    private function sites(): array
     {
-        if (!defined('SITE_ID') || SITE_ID === '') {
-            throw new RuntimeException('SITE_ID is required to install booking iblocks');
+        $sites = [];
+        $by = 'SORT';
+        $order = 'ASC';
+        $result = \CSite::GetList($by, $order, ['ACTIVE' => 'Y']);
+        while ($site = $result->Fetch()) {
+            if (!empty($site['LID'])) {
+                $sites[] = (string) $site['LID'];
+            }
         }
 
-        return SITE_ID;
+        if ($sites === [] && defined('SITE_ID') && SITE_ID !== '') {
+            $sites[] = SITE_ID;
+        }
+        if ($sites === []) {
+            throw new RuntimeException('No active site for the booking iblock');
+        }
+
+        return $sites;
+    }
+
+    private function clearTypeCache(): void
+    {
+        if (class_exists(\Bitrix\Iblock\IblockTypeTable::class)
+            && method_exists(\Bitrix\Iblock\IblockTypeTable::class, 'cleanCache')
+        ) {
+            \Bitrix\Iblock\IblockTypeTable::cleanCache();
+        }
+    }
+
+    private function lastError(string $error): string
+    {
+        global $APPLICATION;
+        $exception = is_object($APPLICATION) ? $APPLICATION->GetException() : null;
+        $extra = is_object($exception) ? $exception->GetString() : '';
+
+        return trim($error . ' ' . $extra);
     }
 
     /**

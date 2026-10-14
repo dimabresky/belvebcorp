@@ -32,13 +32,28 @@ class belveb_booking extends CModule
 
     public function DoInstall(): void
     {
+        global $APPLICATION;
+
         ModuleManager::registerModule($this->MODULE_ID);
-        if (!$this->installDB()) {
-            ModuleManager::unRegisterModule($this->MODULE_ID);
+        if ($this->installDB()) {
+            $this->installFiles();
 
             return;
         }
-        $this->installFiles();
+
+        $message = '';
+        if (is_object($APPLICATION)) {
+            $exception = $APPLICATION->GetException();
+            if (is_object($exception)) {
+                $message = $exception->GetString();
+            }
+        }
+
+        ModuleManager::unRegisterModule($this->MODULE_ID);
+
+        if (is_object($APPLICATION) && $message !== '') {
+            $APPLICATION->ThrowException($message);
+        }
     }
 
     public function DoUninstall(): void
